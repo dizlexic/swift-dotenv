@@ -1,4 +1,8 @@
+#if os(Linux)
+import Glibc
+#else
 import Darwin
+#endif
 import Foundation
 
 /// Structure used to load and save environment files.
