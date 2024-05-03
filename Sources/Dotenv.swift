@@ -162,6 +162,20 @@ public enum Dotenv {
         set(value: value?.stringValue, forKey: key, overwrite: overwrite)
     }
 
+#if os(Linux)
+    /// Set a value in the environment.
+    /// - Parameters:
+    ///   - value: Value to set.
+    ///   - key: Key to set the value with.
+    ///   - overwrite: Flag that indicates if any existing value should be overwritten, defaults to `true`.
+    public static func set(value: String?, forKey key: String, overwrite: Bool = true) {
+        guard let value = value else  {
+            setenv(key, "", overwrite ? 1 : 0)
+            return
+        }
+        setenv(key, value, overwrite ? 1 : 0)
+    }
+#else
     /// Set a value in the environment.
     /// - Parameters:
     ///   - value: Value to set.
@@ -170,7 +184,7 @@ public enum Dotenv {
     public static func set(value: String?, forKey key: String, overwrite: Bool = true) {
         setenv(key, value, overwrite ? 1 : 0)
     }
-
+#endif
     // MARK: - Subscripting
 
     public static subscript(key: String) -> Value? {
